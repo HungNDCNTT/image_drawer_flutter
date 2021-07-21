@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -8,9 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_drawer_flutter/components/all_emojies.dart';
 import 'package:image_drawer_flutter/components/emoji.dart';
 import 'package:image_drawer_flutter/components/textview.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:screenshot/screenshot.dart';
 import '../components/bottombar_container.dart';
 
 typedef OnCallBackImage(File image);
@@ -401,8 +401,9 @@ class _PainterState extends State<Painter> {
 
   void _onDonePress() {
     _imageFile = null;
-    screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
+    screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((Uint8List ut8Image) async {
       //print("Capture Done");
+      final image = File.fromRawPath(ut8Image);
       setState(() {
         _imageFile = image;
       });
