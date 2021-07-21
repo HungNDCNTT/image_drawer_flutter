@@ -48,13 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           child: RaisedButton(
             onPressed: () async {
-              var image = await ImagePicker.pickImage(source: ImageSource.camera);
-              var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+              final picker = ImagePicker();
+              var imagePicker = await picker.getImage(source: ImageSource.camera);
+              final image = await  imagePicker.readAsBytes();
+               var decodedImage = await decodeImageFromList(image);
 
               setState(() {
                 height = decodedImage.height;
                 width = decodedImage.width;
-                _imageFile = image;
+                _imageFile = File(imagePicker.path);
               });
               openImageEdit();
             },
