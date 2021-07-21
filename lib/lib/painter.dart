@@ -744,26 +744,28 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
     Color pickerColor = _color;
     showDialog(
         context: context,
-        child: AlertDialog(
-          title: const Text('Pick a color!'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: pickerColor,
-              onColorChanged: (Color c) => pickerColor = c,
-              showLabel: true,
-              pickerAreaHeightPercent: 0.8,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Pick a color!'),
+            content: SingleChildScrollView(
+              child: ColorPicker(
+                pickerColor: pickerColor,
+                onColorChanged: (Color c) => pickerColor = c,
+                showLabel: true,
+                pickerAreaHeightPercent: 0.8,
+              ),
             ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Got it'),
-              onPressed: () {
-                setState(() => _color = pickerColor);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('Got it'),
+                onPressed: () {
+                  setState(() => _color = pickerColor);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Color get _color => widget._background ? widget._controller.backgroundColor : widget._controller.drawColor;
