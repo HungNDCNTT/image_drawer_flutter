@@ -8,6 +8,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_drawer_flutter/components/all_emojies.dart';
 import 'package:image_drawer_flutter/components/emoji.dart';
+import 'package:image_drawer_flutter/components/loading_widget.dart';
 import 'package:image_drawer_flutter/components/textview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -32,11 +33,13 @@ class Painter extends StatefulWidget {
   final File imageFile;
   final VoidCallback onBackTap;
   final OnCallBackImage calBackImage;
+  final bool isShowLoading;
 
   Painter({
     this.imageFile,
     this.onBackTap,
     this.calBackImage,
+    this.isShowLoading = false,
   });
 
   @override
@@ -188,6 +191,7 @@ class _PainterState extends State<Painter> {
                                     : Container();
                           }).toList(),
                         ),
+                        Visibility(visible: widget.isShowLoading, child: LoadingWidget()),
                       ],
                     ),
                   ),
@@ -401,9 +405,7 @@ class _PainterState extends State<Painter> {
 
   void _onDonePress() {
     _imageFile = null;
-    screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((Uint8List ut8Image) async {
-      //print("Capture Done");
-      final image = File.fromRawPath(ut8Image);
+    screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
       setState(() {
         _imageFile = image;
       });
@@ -415,6 +417,22 @@ class _PainterState extends State<Painter> {
       print(onError);
     });
   }
+// void _onDonePress() {
+//   _imageFile = null;
+//   screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((Uint8List ut8Image) async {
+//     //print("Capture Done");
+//     final image = File.fromRawPath(ut8Image);
+//     setState(() {
+//       _imageFile = image;
+//     });
+//     final paths = await getApplicationDocumentsDirectory();
+//     image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
+//     print('Image link: $image');
+//     widget.calBackImage(image);
+//   }).catchError((onError) {
+//     print(onError);
+//   });
+// }
 }
 
 class _PainterPainter extends CustomPainter {

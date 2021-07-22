@@ -48,10 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           child: RaisedButton(
             onPressed: () async {
-              final picker = ImagePicker();
-              var imagePicker = await picker.getImage(source: ImageSource.camera);
-              final image = await  imagePicker.readAsBytes();
-               var decodedImage = await decodeImageFromList(image);
+              var imagePicker = await ImagePicker.pickImage(source: ImageSource.camera);
+              final image = await imagePicker.readAsBytes();
+              var decodedImage = await decodeImageFromList(image);
 
               setState(() {
                 height = decodedImage.height;
@@ -70,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return Painter(
         imageFile: _imageFile,
         onBackTap: () => Navigator.pop(context),
+        isShowLoading: true,
       );
     }));
   }
