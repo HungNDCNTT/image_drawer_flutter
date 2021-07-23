@@ -13,8 +13,6 @@ import 'package:path_provider/path_provider.dart';
 
 import '../components/bottombar_container.dart';
 
-typedef OnCallBackImage(File image);
-
 var width = 500;
 var height = 500;
 var openBottomSheet = false;
@@ -31,13 +29,8 @@ var slider = 0.0;
 class Painter extends StatefulWidget {
   final File imageFile;
   final VoidCallback onBackTap;
-  final OnCallBackImage calBackImage;
 
-  Painter({
-    this.imageFile,
-    this.onBackTap,
-    this.calBackImage,
-  });
+  Painter({this.imageFile, this.onBackTap});
 
   @override
   _PainterState createState() => new _PainterState();
@@ -409,7 +402,6 @@ class _PainterState extends State<Painter> {
       final paths = await getApplicationDocumentsDirectory();
       image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
       print('Image link: $image');
-      widget.calBackImage(image);
     }).catchError((onError) {
       print(onError);
     });
