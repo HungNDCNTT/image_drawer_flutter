@@ -7,11 +7,13 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_drawer_flutter/components/all_emojies.dart';
 import 'package:image_drawer_flutter/components/emoji.dart';
+import 'package:image_drawer_flutter/components/loading_widget.dart';
 import 'package:image_drawer_flutter/components/textview.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:screenshot/screenshot.dart';
 import '../components/bottombar_container.dart';
+
+typedef OnCallBackImage(File image);
 
 var width = 500;
 var height = 500;
@@ -29,11 +31,18 @@ var slider = 0.0;
 class Painter extends StatefulWidget {
   final File imageFile;
   final VoidCallback onBackTap;
+  final OnCallBackImage calBackImage;
+  final bool isShowLoading;
 
-  Painter({this.imageFile, this.onBackTap});
+  Painter({
+    this.imageFile,
+    this.onBackTap,
+    this.calBackImage,
+    this.isShowLoading = false,
+  });
 
   @override
-  _PainterState createState() => new _PainterState();
+  _PainterState createState() => _PainterState();
 }
 
 class _PainterState extends State<Painter> {
@@ -44,7 +53,7 @@ class _PainterState extends State<Painter> {
   PainterController painterController;
 
   PainterController _newController() {
-    PainterController controller = new PainterController();
+    PainterController controller = PainterController();
     controller.thickness = 5.0;
     controller.backgroundColor = Colors.transparent;
     return controller;
@@ -74,13 +83,13 @@ class _PainterState extends State<Painter> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = new CustomPaint(
+    Widget child = CustomPaint(
       willChange: true,
-      painter: new _PainterPainter(painterController._pathHistory, repaint: painterController),
+      painter: _PainterPainter(painterController._pathHistory, repaint: painterController),
     );
-    child = new ClipRect(child: child);
+    child = ClipRect(child: child);
     if (!_finished) {
-      child = new GestureDetector(
+      child = GestureDetector(
         child: child,
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
@@ -89,13 +98,6 @@ class _PainterState extends State<Painter> {
     }
     return Scaffold(
       key: sCafKey,
-      // appBar: PreferredSize(
-      //   preferredSize: Size(50,50),
-      //   child: AppBar(
-      //     backgroundColor: Colors.blue,
-      //     actions: [Icon(Icons.ac_unit)],
-      //   ),
-      // ),
       body: Stack(
         children: [
           GestureDetector(
@@ -181,6 +183,7 @@ class _PainterState extends State<Painter> {
                                     : Container();
                           }).toList(),
                         ),
+                        Visibility(visible: widget.isShowLoading, child: LoadingWidget()),
                       ],
                     ),
                   ),
@@ -395,13 +398,13 @@ class _PainterState extends State<Painter> {
   void _onDonePress() {
     _imageFile = null;
     screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
-      //print("Capture Done");
       setState(() {
         _imageFile = image;
       });
       final paths = await getApplicationDocumentsDirectory();
       image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
       print('Image link: $image');
+      widget.calBackImage(image);
     }).catchError((onError) {
       print(onError);
     });
@@ -433,9 +436,9 @@ class _PathHistory {
   bool get isEmpty => _paths.isEmpty || (_paths.length == 1 && _inDrag);
 
   _PathHistory() {
-    _paths = new List<MapEntry<Path, Paint>>();
+    _paths = List<MapEntry<Path, Paint>>();
     _inDrag = false;
-    _backgroundPaint = new Paint()..blendMode = BlendMode.dstOver;
+    _backgroundPaint = Paint()..blendMode = BlendMode.dstOver;
   }
 
   void setBackgroundColor(Color backgroundColor) {
@@ -457,9 +460,9 @@ class _PathHistory {
   void add(Offset startPoint) {
     if (!_inDrag) {
       _inDrag = true;
-      Path path = new Path();
+      Path path = Path();
       path.moveTo(startPoint.dx, startPoint.dy);
-      _paths.add(new MapEntry<Path, Paint>(path, currentPaint));
+      _paths.add(MapEntry<Path, Paint>(path, currentPaint));
     }
   }
 
@@ -480,7 +483,7 @@ class _PathHistory {
       Paint p = path.value;
       canvas.drawPath(path.key, p);
     }
-    canvas.drawRect(new Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
     canvas.restore();
   }
 }
@@ -492,16 +495,7 @@ class PictureDetails {
   final int width;
   final int height;
 
-  const PictureDetails(this.picture, this.width, this.height);
-
-// Future<Image> toImage() {
-//   return picture.toImage(width, height);
-// }
-//
-// Future<Uint8List> toPNG() async {
-//   final image = await toImage();
-//   return (await image.toByteData(format: ImageByteFormat.png)).buffer.asUint8List();
-// }
+  PictureDetails(this.picture, this.width, this.height);
 }
 
 class PainterController extends ChangeNotifier {
@@ -515,7 +509,7 @@ class PainterController extends ChangeNotifier {
   ValueGetter<Size> _widgetFinish;
 
   PainterController() {
-    _pathHistory = new _PathHistory();
+    _pathHistory = _PathHistory();
   }
 
   bool get isEmpty => _pathHistory.isEmpty;
@@ -549,7 +543,7 @@ class PainterController extends ChangeNotifier {
   }
 
   void _updatePaint() {
-    Paint paint = new Paint();
+    Paint paint = Paint();
     if (_eraseMode) {
       paint.blendMode = BlendMode.clear;
       paint.color = Color.fromARGB(0, 255, 0, 0);
@@ -589,10 +583,10 @@ class PainterController extends ChangeNotifier {
   }
 
   PictureDetails _render(Size size) {
-    PictureRecorder recorder = new PictureRecorder();
-    Canvas canvas = new Canvas(recorder);
+    PictureRecorder recorder = PictureRecorder();
+    Canvas canvas = Canvas(recorder);
     _pathHistory.draw(canvas, size);
-    return new PictureDetails(recorder.endRecording(), size.width.floor(), size.height.floor());
+    return PictureDetails(recorder.endRecording(), size.width.floor(), size.height.floor());
   }
 
   bool isFinished() {
@@ -608,7 +602,7 @@ class Sliders extends StatefulWidget {
   final NewSize newSize;
   final bool isTextSize;
 
-  const Sliders({
+  Sliders({
     Key key,
     this.size,
     this.sizeValue,
@@ -635,7 +629,7 @@ class _SlidersState extends State<Sliders> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.0),
               child: Text(text ?? ''),
             ),
             Divider(
@@ -715,7 +709,7 @@ class ColorPickerButton extends StatefulWidget {
   ColorPickerButton(this._controller, this._background);
 
   @override
-  _ColorPickerButtonState createState() => new _ColorPickerButtonState();
+  _ColorPickerButtonState createState() => _ColorPickerButtonState();
 }
 
 class _ColorPickerButtonState extends State<ColorPickerButton> {
@@ -736,26 +730,28 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
     Color pickerColor = _color;
     showDialog(
         context: context,
-        child: AlertDialog(
-          title: const Text('Pick a color!'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: pickerColor,
-              onColorChanged: (Color c) => pickerColor = c,
-              showLabel: true,
-              pickerAreaHeightPercent: 0.8,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Pick a color!'),
+            content: SingleChildScrollView(
+              child: ColorPicker(
+                pickerColor: pickerColor,
+                onColorChanged: (Color c) => pickerColor = c,
+                showLabel: true,
+                pickerAreaHeightPercent: 0.8,
+              ),
             ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Got it'),
-              onPressed: () {
-                setState(() => _color = pickerColor);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Got it'),
+                onPressed: () {
+                  setState(() => _color = pickerColor);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Color get _color => widget._background ? widget._controller.backgroundColor : widget._controller.drawColor;

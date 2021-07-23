@@ -38,29 +38,31 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(50, 50),
-          child: AppBar(
-            backgroundColor: Colors.blue,
-            actions: [Icon(Icons.ac_unit)],
-          ),
+      appBar: PreferredSize(
+        preferredSize: Size(50, 50),
+        child: AppBar(
+          backgroundColor: Colors.blue,
+          actions: [Icon(Icons.ac_unit)],
         ),
-        body: Center(
-          child: RaisedButton(
-            onPressed: () async {
-              var image = await ImagePicker.pickImage(source: ImageSource.camera);
-              var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () async {
+            var imagePicker = await ImagePicker.pickImage(source: ImageSource.camera);
+            final image = await imagePicker.readAsBytes();
+            var decodedImage = await decodeImageFromList(image);
 
-              setState(() {
-                height = decodedImage.height;
-                width = decodedImage.width;
-                _imageFile = image;
-              });
-              openImageEdit();
-            },
-            child: Text("Open Editor"),
-          ),
-        ));
+            setState(() {
+              height = decodedImage.height;
+              width = decodedImage.width;
+              _imageFile = File(imagePicker.path);
+            });
+            openImageEdit();
+          },
+          child: Text("Open Editor"),
+        ),
+      ),
+    );
   }
 
   Future<void> openImageEdit() async {
@@ -68,6 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
       return Painter(
         imageFile: _imageFile,
         onBackTap: () => Navigator.pop(context),
+        isShowLoading: true,
+        calBackImage: (imageEdited) => Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Image.file(imageEdited),
+          ),
+        ),
       );
     }));
   }

@@ -17,19 +17,19 @@ class _EmojiesState extends State<Emojies> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding:  EdgeInsets.all(20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  new Text("Select Emoji"),
+                   Text("Select Emoji"),
                 ],
               ),
             ),
             Divider(
               height: 1,
             ),
-            new SizedBox(
+             SizedBox(
               height: 10,
             ),
             Container(
@@ -58,7 +58,7 @@ class _EmojiesState extends State<Emojies> {
         ));
   }
 
-  List<String> emojis = new List();
+  List<String> emojis =  List();
 
   @override
   void initState() {

@@ -9,7 +9,16 @@ class TextView extends StatefulWidget {
   final String value;
   final TextAlign align;
 
-  const TextView({Key key, this.left, this.top, this.onTap, this.onPanUpdate, this.fontSize, this.value, this.align}) : super(key: key);
+  const TextView({
+    Key key,
+    this.left,
+    this.top,
+    this.onTap,
+    this.onPanUpdate,
+    this.fontSize,
+    this.value,
+    this.align,
+  }) : super(key: key);
 
   @override
   _TextViewState createState() => _TextViewState();
