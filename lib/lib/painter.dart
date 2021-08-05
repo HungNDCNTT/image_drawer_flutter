@@ -290,12 +290,12 @@ class _PainterState extends State<Painter> {
                   });
                 }
               },
-              title: isEnableDoneBtn ? 'Undo' : 'Uploading',
+              title: 'Undo',
             ),
             BottomBarContainer(
               icons: isEnableDoneBtn ? Icons.check : Icons.upload_rounded,
               onTap: isEnableDoneBtn ? _onDonePress : null,
-              title: 'Done',
+              title: isEnableDoneBtn ? 'Done' : 'Uploading',
             ),
           ],
         ),
