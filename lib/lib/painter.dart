@@ -404,7 +404,7 @@ class _PainterState extends State<Painter> {
       final paths = await getApplicationDocumentsDirectory();
       image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
       print('Image link: $image');
-      widget.calBackImage(image);
+      widget.calBackImage == null ? print('nothing') : widget.calBackImage(image);
     }).catchError((onError) {
       print(onError);
     });
