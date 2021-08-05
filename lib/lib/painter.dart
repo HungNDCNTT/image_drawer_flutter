@@ -27,6 +27,7 @@ List<Offset> offsets = [];
 List multiWidget = [];
 var howMuchWidgetIs = 0;
 var slider = 0.0;
+bool isEnableDoneBtn = true;
 
 class Painter extends StatefulWidget {
   final File imageFile;
@@ -293,7 +294,7 @@ class _PainterState extends State<Painter> {
             ),
             BottomBarContainer(
               icons: Icons.check,
-              onTap: _onDonePress,
+              onTap: isEnableDoneBtn ? _onDonePress : null,
               title: 'Done',
             ),
           ],
@@ -397,6 +398,9 @@ class _PainterState extends State<Painter> {
 
   void _onDonePress() {
     _imageFile = null;
+    setState(() {
+      isEnableDoneBtn = false;
+    });
     screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
       setState(() {
         _imageFile = image;
@@ -407,6 +411,9 @@ class _PainterState extends State<Painter> {
       widget.calBackImage == null ? print('nothing') : widget.calBackImage(image);
     }).catchError((onError) {
       print(onError);
+    });
+    setState(() {
+      isEnableDoneBtn = true;
     });
   }
 }
