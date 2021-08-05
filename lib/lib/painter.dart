@@ -412,9 +412,6 @@ class _PainterState extends State<Painter> {
     }).catchError((onError) {
       print(onError);
     });
-    setState(() {
-      isEnableDoneBtn = !isEnableDoneBtn;
-    });
   }
 }
 
