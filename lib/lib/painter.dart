@@ -293,7 +293,7 @@ class _PainterState extends State<Painter> {
               title: 'Undo',
             ),
             BottomBarContainer(
-              icons: Icons.check,
+              icons: isEnableDoneBtn ? Icons.check : Icons.upload_rounded,
               onTap: isEnableDoneBtn ? _onDonePress : null,
               title: 'Done',
             ),
