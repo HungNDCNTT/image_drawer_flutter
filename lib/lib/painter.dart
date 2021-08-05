@@ -290,7 +290,7 @@ class _PainterState extends State<Painter> {
                   });
                 }
               },
-              title: 'Undo',
+              title: isEnableDoneBtn ? 'Undo' : 'Uploading',
             ),
             BottomBarContainer(
               icons: isEnableDoneBtn ? Icons.check : Icons.upload_rounded,
