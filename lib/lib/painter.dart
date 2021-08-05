@@ -73,6 +73,7 @@ class _PainterState extends State<Painter> {
     super.initState();
     _finished = false;
     painterController._widgetFinish = _finish;
+    isEnableDoneBtn = true;
   }
 
   Size _finish() {
