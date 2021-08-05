@@ -399,7 +399,7 @@ class _PainterState extends State<Painter> {
   void _onDonePress() {
     _imageFile = null;
     setState(() {
-      isEnableDoneBtn = false;
+      isEnableDoneBtn = !isEnableDoneBtn;
     });
     screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
       setState(() {
@@ -413,7 +413,7 @@ class _PainterState extends State<Painter> {
       print(onError);
     });
     setState(() {
-      isEnableDoneBtn = true;
+      isEnableDoneBtn = !isEnableDoneBtn;
     });
   }
 }
