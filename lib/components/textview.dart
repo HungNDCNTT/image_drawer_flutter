@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class TextView extends StatefulWidget {
   final double left;
   final double top;
-  final Function onTap;
-  final Function(DragUpdateDetails) onPanUpdate;
+  final VoidCallback? onTap;
+  final Function(DragUpdateDetails)? onPanUpdate;
   final double fontSize;
   final String value;
-  final TextAlign align;
+  final TextAlign? align;
 
   const TextView({
-    Key key,
-    this.left,
-    this.top,
+    Key? key,
+    this.left=0.0,
+    this.top=0.0,
     this.onTap,
     this.onPanUpdate,
-    this.fontSize,
-    this.value,
+    this.fontSize=0.0,
+    this.value='',
     this.align,
   }) : super(key: key);
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -30,13 +31,13 @@ var slider = 0.0;
 bool isEnableDoneBtn = true;
 
 class Painter extends StatefulWidget {
-  final File imageFile;
-  final VoidCallback onBackTap;
-  final OnCallBackImage calBackImage;
+  File imageFile = File('');
+  final VoidCallback? onBackTap;
+  final OnCallBackImage? calBackImage;
   final bool isShowLoading;
 
   Painter({
-    this.imageFile,
+    required this.imageFile,
     this.onBackTap,
     this.calBackImage,
     this.isShowLoading = false,
@@ -47,11 +48,11 @@ class Painter extends StatefulWidget {
 }
 
 class _PainterState extends State<Painter> {
-  bool _finished;
+  bool? _finished;
   final GlobalKey globalKey = GlobalKey();
   final sCafKey = GlobalKey<ScaffoldState>();
-  File _imageFile;
-  PainterController painterController;
+  File _imageFile = File('');
+  PainterController painterController = PainterController();
 
   PainterController _newController() {
     PainterController controller = PainterController();
@@ -68,7 +69,7 @@ class _PainterState extends State<Painter> {
     multiWidget.clear();
     inputTextController.clear();
     howMuchWidgetIs = 0;
-    _imageFile = widget.imageFile ?? null;
+    _imageFile = widget.imageFile;
     painterController = _newController();
     super.initState();
     _finished = false;
@@ -80,17 +81,18 @@ class _PainterState extends State<Painter> {
     setState(() {
       _finished = true;
     });
-    return context.size;
+    return context.size ?? Size(double.infinity, double.infinity);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget child = CustomPaint(
       willChange: true,
-      painter: _PainterPainter(painterController._pathHistory, repaint: painterController),
+      painter: _PainterPainter(painterController!._pathHistory,
+          repaint: painterController),
     );
     child = ClipRect(child: child);
-    if (!_finished) {
+    if (!_finished!) {
       child = GestureDetector(
         child: child,
         onPanStart: _onPanStart,
@@ -104,7 +106,7 @@ class _PainterState extends State<Painter> {
         children: [
           GestureDetector(
             onTap: () {
-              sCafKey.currentState.showBottomSheet((context) => SizedBox());
+              sCafKey.currentState!.showBottomSheet((context) => SizedBox());
             },
             child: Center(
               child: Screenshot(
@@ -133,49 +135,61 @@ class _PainterState extends State<Painter> {
                         ),
                         Stack(
                           children: multiWidget.asMap().entries.map((f) {
-                            return type[f?.key] == 1
+                            return type[f.key] == 1
                                 ? EmoJiView(
-                                    left: offsets[f?.key]?.dx,
-                                    top: offsets[f?.key]?.dy,
+                                    left: offsets[f.key].dx,
+                                    top: offsets[f.key].dy,
                                     onTap: () {
-                                      sCafKey.currentState.showBottomSheet((context) => Sliders(
-                                            size: f?.key,
-                                            sizeValue: fontSize[f?.key]?.toDouble(),
-                                            newSize: (value) {
-                                              setState(() {
-                                                fontSize[f?.key] = value;
-                                              });
-                                            },
-                                          ));
+                                      sCafKey.currentState!
+                                          .showBottomSheet((context) => Sliders(
+                                                size: f.key,
+                                                sizeValue:
+                                                    fontSize[f.key]?.toDouble(),
+                                                newSize: (value) {
+                                                  setState(() {
+                                                    fontSize[f.key] = value;
+                                                  });
+                                                },
+                                              ));
                                     },
                                     onPanUpdate: (details) {
                                       setState(() {
-                                        offsets[f?.key] = Offset(offsets[f?.key].dx + details?.delta?.dx, offsets[f.key].dy + details.delta.dy);
+                                        offsets[f.key] = Offset(
+                                            offsets[f.key].dx +
+                                                details.delta.dx,
+                                            offsets[f.key].dy +
+                                                details.delta.dy);
                                       });
                                     },
                                     value: f.value.toString(),
                                     fontSize: fontSize[f.key].toDouble(),
                                     align: TextAlign.center,
                                   )
-                                : type[f?.key] == 2
+                                : type[f.key] == 2
                                     ? TextView(
-                                        left: offsets[f?.key]?.dx,
-                                        top: offsets[f?.key]?.dy,
+                                        left: offsets[f.key].dx,
+                                        top: offsets[f.key].dy,
                                         onTap: () {
-                                          sCafKey.currentState.showBottomSheet((context) => Sliders(
-                                                size: f?.key,
-                                                sizeValue: fontSize[f?.key]?.toDouble(),
-                                                isTextSize: true,
-                                                newSize: (size) {
-                                                  setState(() {
-                                                    fontSize[f?.key] = size;
-                                                  });
-                                                },
-                                              ));
+                                          sCafKey.currentState!.showBottomSheet(
+                                              (context) => Sliders(
+                                                    size: f.key,
+                                                    sizeValue: fontSize[f.key]
+                                                        ?.toDouble(),
+                                                    isTextSize: true,
+                                                    newSize: (size) {
+                                                      setState(() {
+                                                        fontSize[f.key] = size;
+                                                      });
+                                                    },
+                                                  ));
                                         },
                                         onPanUpdate: (details) {
                                           setState(() {
-                                            offsets[f.key] = Offset(offsets[f.key].dx + details.delta.dx, offsets[f.key].dy + details.delta.dy);
+                                            offsets[f.key] = Offset(
+                                                offsets[f.key].dx +
+                                                    details.delta.dx,
+                                                offsets[f.key].dy +
+                                                    details.delta.dy);
                                           });
                                         },
                                         value: f.value.toString(),
@@ -185,7 +199,9 @@ class _PainterState extends State<Painter> {
                                     : Container();
                           }).toList(),
                         ),
-                        Visibility(visible: widget.isShowLoading, child: LoadingWidget()),
+                        Visibility(
+                            visible: widget.isShowLoading,
+                            child: LoadingWidget()),
                       ],
                     ),
                   ),
@@ -196,7 +212,8 @@ class _PainterState extends State<Painter> {
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
+        decoration: BoxDecoration(
+            color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
         height: 70,
         child: ListView(
           scrollDirection: Axis.horizontal,
@@ -207,10 +224,10 @@ class _PainterState extends State<Painter> {
                 if (widget.onBackTap == null) {
                   Navigator.pop(context);
                 } else {
-                  widget.onBackTap();
+                  widget.onBackTap!();
                 }
                 setState(() {
-                  _imageFile = null;
+                  _imageFile = File('');
                   inputTextController.text = '';
                   painterController.clear();
                   type.clear();
@@ -363,7 +380,9 @@ class _PainterState extends State<Painter> {
                   width: 350,
                   height: 60,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.5), borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 0.5),
+                      borderRadius: BorderRadius.circular(10)),
                   child: TextField(
                     controller: inputTextController,
                     decoration: InputDecoration(
@@ -381,13 +400,15 @@ class _PainterState extends State<Painter> {
   }
 
   void _onPanStart(DragStartDetails start) {
-    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(start.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox)
+        .globalToLocal(start.globalPosition);
     painterController._pathHistory.add(pos);
     painterController._notifyListeners();
   }
 
   void _onPanUpdate(DragUpdateDetails update) {
-    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(update.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox)
+        .globalToLocal(update.globalPosition);
     painterController._pathHistory.updateCurrent(pos);
     painterController._notifyListeners();
   }
@@ -398,18 +419,26 @@ class _PainterState extends State<Painter> {
   }
 
   void _onDonePress() {
-    _imageFile = null;
+    _imageFile = File('');
     setState(() {
       isEnableDoneBtn = !isEnableDoneBtn;
     });
-    screenshotController.capture(delay: Duration(milliseconds: 500), pixelRatio: 1.5).then((File image) async {
+    screenshotController
+        .capture(delay: Duration(milliseconds: 10))
+        .then((capturedImage) async {
+      final image = File.fromRawPath(capturedImage ?? Uint8List(0));
       setState(() {
         _imageFile = image;
       });
       final paths = await getApplicationDocumentsDirectory();
-      image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
+      image.copy(paths.path +
+          '/' +
+          DateTime.now().millisecondsSinceEpoch.toString() +
+          '.png');
       print('Image link: $image');
-      widget.calBackImage == null ? print('nothing') : widget.calBackImage(image);
+      widget.calBackImage == null
+          ? print('nothing')
+          : widget.calBackImage!(image);
       setState(() {
         isEnableDoneBtn = !isEnableDoneBtn;
       });
@@ -422,7 +451,8 @@ class _PainterState extends State<Painter> {
 class _PainterPainter extends CustomPainter {
   final _PathHistory _path;
 
-  _PainterPainter(this._path, {Listenable repaint}) : super(repaint: repaint);
+  _PainterPainter(this._path, {required Listenable repaint})
+      : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -436,18 +466,21 @@ class _PainterPainter extends CustomPainter {
 }
 
 class _PathHistory {
-  List<MapEntry<Path, Paint>> _paths;
+  late List<MapEntry<Path, Paint>> _paths;
   Paint currentPaint;
   Paint _backgroundPaint;
   bool _inDrag;
 
   bool get isEmpty => _paths.isEmpty || (_paths.length == 1 && _inDrag);
 
-  _PathHistory() {
-    _paths = List<MapEntry<Path, Paint>>();
-    _inDrag = false;
-    _backgroundPaint = Paint()..blendMode = BlendMode.dstOver;
-  }
+  _PathHistory()
+      : _paths = <MapEntry<Path, Paint>>[],
+        _inDrag = false,
+        _backgroundPaint = new Paint()..blendMode = BlendMode.dstOver,
+        currentPaint = new Paint()
+          ..color = Colors.black
+          ..strokeWidth = 1.0
+          ..style = PaintingStyle.fill;
 
   void setBackgroundColor(Color backgroundColor) {
     _backgroundPaint.color = backgroundColor;
@@ -491,7 +524,8 @@ class _PathHistory {
       Paint p = path.value;
       canvas.drawPath(path.key, p);
     }
-    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
+    canvas.drawRect(
+        Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
     canvas.restore();
   }
 }
@@ -512,13 +546,10 @@ class PainterController extends ChangeNotifier {
   bool _eraseMode = false;
 
   double _thickness = 1.0;
-  PictureDetails _cached;
-  _PathHistory _pathHistory;
-  ValueGetter<Size> _widgetFinish;
+  PictureDetails? _cached;
+  _PathHistory _pathHistory  = _PathHistory();
+  ValueGetter<Size>? _widgetFinish;
 
-  PainterController() {
-    _pathHistory = _PathHistory();
-  }
 
   bool get isEmpty => _pathHistory.isEmpty;
 
@@ -585,16 +616,22 @@ class PainterController extends ChangeNotifier {
 
   PictureDetails finish() {
     if (!isFinished()) {
-      _cached = _render(_widgetFinish());
+      if (_widgetFinish != null) {
+        _cached = _render(_widgetFinish!());
+      } else {
+        throw new StateError(
+            'Called finish on a PainterController that was not connected to a widget yet!');
+      }
     }
-    return _cached;
+    return _cached!;
   }
 
   PictureDetails _render(Size size) {
     PictureRecorder recorder = PictureRecorder();
     Canvas canvas = Canvas(recorder);
     _pathHistory.draw(canvas, size);
-    return PictureDetails(recorder.endRecording(), size.width.floor(), size.height.floor());
+    return PictureDetails(
+        recorder.endRecording(), size.width.floor(), size.height.floor());
   }
 
   bool isFinished() {
@@ -605,13 +642,13 @@ class PainterController extends ChangeNotifier {
 typedef NewSize(double a);
 
 class Sliders extends StatefulWidget {
-  final int size;
+  final int? size;
   final sizeValue;
-  final NewSize newSize;
+  final NewSize? newSize;
   final bool isTextSize;
 
   Sliders({
-    Key key,
+    Key? key,
     this.size,
     this.sizeValue,
     this.newSize,
@@ -638,7 +675,7 @@ class _SlidersState extends State<Sliders> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: Text(text ?? ''),
+              child: Text(text),
             ),
             Divider(
               height: 1,
@@ -648,17 +685,17 @@ class _SlidersState extends State<Sliders> {
                 min: 0.0,
                 max: 100.0,
                 onChangeEnd: (v) {
-                  widget.newSize(v);
+                  widget.newSize!(v);
                   setState(() {
-                    fontSize[widget.size] = v.toInt();
+                    fontSize[widget.size ?? 0] = v.toInt();
                   });
                 },
                 onChanged: (v) {
                   setState(() {
-                    widget.newSize(v);
+                    widget.newSize!(v);
                     slider = v;
                     print(v.toInt());
-                    fontSize[widget.size] = v.toInt();
+                    fontSize[widget.size ?? 0] = v.toInt();
                   });
                 }),
           ],
@@ -678,7 +715,8 @@ class DrawBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Flexible(child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          Flexible(child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             return Container(
                 child: Slider(
               value: _controller.thickness,
@@ -690,12 +728,14 @@ class DrawBar extends StatelessWidget {
               activeColor: Colors.white,
             ));
           })),
-          StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             return RotatedBox(
                 quarterTurns: _controller.eraseMode ? 2 : 0,
                 child: IconButton(
                     icon: Icon(Icons.create),
-                    tooltip: (_controller.eraseMode ? 'Disable' : 'Enable') + ' eraser',
+                    tooltip: (_controller.eraseMode ? 'Disable' : 'Enable') +
+                        ' eraser',
                     onPressed: () {
                       setState(() {
                         _controller.eraseMode = !_controller.eraseMode;
@@ -725,7 +765,12 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        IconButton(icon: Icon(_iconData, color: _color), tooltip: widget._background ? 'Change background color' : 'Change draw color', onPressed: _pickColor),
+        IconButton(
+            icon: Icon(_iconData, color: _color),
+            tooltip: widget._background
+                ? 'Change background color'
+                : 'Change draw color',
+            onPressed: _pickColor),
         Text(
           'Brush',
           style: TextStyle(color: Colors.white),
@@ -762,9 +807,12 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
         });
   }
 
-  Color get _color => widget._background ? widget._controller.backgroundColor : widget._controller.drawColor;
+  Color get _color => widget._background
+      ? widget._controller.backgroundColor
+      : widget._controller.drawColor;
 
-  IconData get _iconData => widget._background ? Icons.format_color_fill : FontAwesomeIcons.brush;
+  IconData get _iconData =>
+      widget._background ? Icons.format_color_fill : FontAwesomeIcons.brush;
 
   set _color(Color color) {
     if (widget._background) {

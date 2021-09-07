@@ -28,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  File _imageFile;
+  File _imageFile = File('');
 
   @override
   void initState() {
@@ -48,14 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: RaisedButton(
           onPressed: () async {
-            var imagePicker = await ImagePicker.pickImage(source: ImageSource.camera);
-            final image = await imagePicker.readAsBytes();
-            var decodedImage = await decodeImageFromList(image);
+            var imagePicker = ImagePicker();
+            final filePicked = await imagePicker.pickImage(source: ImageSource.gallery);
 
             setState(() {
-              height = decodedImage.height;
-              width = decodedImage.width;
-              _imageFile = File(imagePicker.path);
+              _imageFile = File(filePicked!.path);
             });
             openImageEdit();
           },

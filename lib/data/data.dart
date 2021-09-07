@@ -1,6 +1,5 @@
-List<String> getSmileys(){
-
-  List<String> emojis = new List();
+List<String> getSmileys() {
+  List<String> emojis = [];
   String emoji;
 
   emoji = "😀";
@@ -91,7 +90,6 @@ List<String> getSmileys(){
   emojis.add(emoji);
   emoji = "😝";
   emojis.add(emoji);
-
 
   emoji = "🤤";
   emojis.add(emoji);

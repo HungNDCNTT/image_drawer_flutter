@@ -4,24 +4,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_drawer_flutter/lib/painter.dart';
 
 class BottomBarContainer extends StatefulWidget {
-  final Color colors;
-  final Function onTap;
+  final Color? colors;
+  final VoidCallback? onTap;
   final String title;
-  final IconData icons;
-  final PainterController controller;
+  final IconData? icons;
+  final PainterController? controller;
   final bool background;
   final bool isBrush;
 
   const BottomBarContainer({
-    Key key,
     this.onTap,
-    this.title,
+    this.title="",
     this.icons,
     this.colors,
     this.controller,
     this.background = false,
     this.isBrush = false,
-  }) : super(key: key);
+  });
 
   @override
   _BottomBarContainerState createState() => _BottomBarContainerState();
@@ -87,15 +86,15 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
         });
   }
 
-  Color get _color => widget.background ? widget.controller.backgroundColor : widget.controller.drawColor;
+  Color get _color => widget.background ? widget.controller!.backgroundColor : widget.controller!.drawColor;
 
   IconData get _iconData => widget.background ? Icons.format_color_fill : FontAwesomeIcons.brush;
 
   set _color(Color color) {
     if (widget.background) {
-      widget.controller.backgroundColor = color;
+      widget.controller!.backgroundColor = color;
     } else {
-      widget.controller.drawColor = color;
+      widget.controller!.drawColor = color;
     }
   }
 }

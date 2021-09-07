@@ -7,13 +7,13 @@ class Emojies extends StatefulWidget {
 }
 
 class _EmojiesState extends State<Emojies> {
-  List emojes = List();
+  List<String>? emojes ;
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 400,
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(blurRadius: 10.9, color: Colors.grey[400])]),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(blurRadius: 10.9, color: Colors.grey)]),
         child: Column(
           children: <Widget>[
             Padding(
@@ -39,7 +39,7 @@ class _EmojiesState extends State<Emojies> {
                   physics: ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 0.0, maxCrossAxisExtent: 60.0),
-                  children: emojis.map((String emoji) {
+                  children: emojis!.map((String emoji) {
                     return GridTile(
                         child: GestureDetector(
                       onTap: () {
@@ -58,7 +58,7 @@ class _EmojiesState extends State<Emojies> {
         ));
   }
 
-  List<String> emojis =  List();
+  List<String>? emojis;
 
   @override
   void initState() {
