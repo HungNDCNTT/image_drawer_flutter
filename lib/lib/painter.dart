@@ -31,10 +31,10 @@ var slider = 0.0;
 bool isEnableDoneBtn = true;
 
 class Painter extends StatefulWidget {
-  File imageFile = File('');
+  late File imageFile = File('');
   final VoidCallback? onBackTap;
   final OnCallBackImage? calBackImage;
-  final bool isShowLoading;
+   bool isShowLoading;
 
   Painter({
     required this.imageFile,
@@ -75,6 +75,7 @@ class _PainterState extends State<Painter> {
     _finished = false;
     painterController._widgetFinish = _finish;
     isEnableDoneBtn = true;
+    widget.isShowLoading = false;
   }
 
   Size _finish() {
@@ -88,8 +89,7 @@ class _PainterState extends State<Painter> {
   Widget build(BuildContext context) {
     Widget child = CustomPaint(
       willChange: true,
-      painter: _PainterPainter(painterController!._pathHistory,
-          repaint: painterController),
+      painter: _PainterPainter(painterController._pathHistory, repaint: painterController),
     );
     child = ClipRect(child: child);
     if (!_finished!) {
@@ -140,25 +140,19 @@ class _PainterState extends State<Painter> {
                                     left: offsets[f.key].dx,
                                     top: offsets[f.key].dy,
                                     onTap: () {
-                                      sCafKey.currentState!
-                                          .showBottomSheet((context) => Sliders(
-                                                size: f.key,
-                                                sizeValue:
-                                                    fontSize[f.key]?.toDouble(),
-                                                newSize: (value) {
-                                                  setState(() {
-                                                    fontSize[f.key] = value;
-                                                  });
-                                                },
-                                              ));
+                                      sCafKey.currentState!.showBottomSheet((context) => Sliders(
+                                            size: f.key,
+                                            sizeValue: fontSize[f.key]?.toDouble(),
+                                            newSize: (value) {
+                                              setState(() {
+                                                fontSize[f.key] = value;
+                                              });
+                                            },
+                                          ));
                                     },
                                     onPanUpdate: (details) {
                                       setState(() {
-                                        offsets[f.key] = Offset(
-                                            offsets[f.key].dx +
-                                                details.delta.dx,
-                                            offsets[f.key].dy +
-                                                details.delta.dy);
+                                        offsets[f.key] = Offset(offsets[f.key].dx + details.delta.dx, offsets[f.key].dy + details.delta.dy);
                                       });
                                     },
                                     value: f.value.toString(),
@@ -170,26 +164,20 @@ class _PainterState extends State<Painter> {
                                         left: offsets[f.key].dx,
                                         top: offsets[f.key].dy,
                                         onTap: () {
-                                          sCafKey.currentState!.showBottomSheet(
-                                              (context) => Sliders(
-                                                    size: f.key,
-                                                    sizeValue: fontSize[f.key]
-                                                        ?.toDouble(),
-                                                    isTextSize: true,
-                                                    newSize: (size) {
-                                                      setState(() {
-                                                        fontSize[f.key] = size;
-                                                      });
-                                                    },
-                                                  ));
+                                          sCafKey.currentState!.showBottomSheet((context) => Sliders(
+                                                size: f.key,
+                                                sizeValue: fontSize[f.key]?.toDouble(),
+                                                isTextSize: true,
+                                                newSize: (size) {
+                                                  setState(() {
+                                                    fontSize[f.key] = size;
+                                                  });
+                                                },
+                                              ));
                                         },
                                         onPanUpdate: (details) {
                                           setState(() {
-                                            offsets[f.key] = Offset(
-                                                offsets[f.key].dx +
-                                                    details.delta.dx,
-                                                offsets[f.key].dy +
-                                                    details.delta.dy);
+                                            offsets[f.key] = Offset(offsets[f.key].dx + details.delta.dx, offsets[f.key].dy + details.delta.dy);
                                           });
                                         },
                                         value: f.value.toString(),
@@ -199,9 +187,7 @@ class _PainterState extends State<Painter> {
                                     : Container();
                           }).toList(),
                         ),
-                        Visibility(
-                            visible: widget.isShowLoading,
-                            child: LoadingWidget()),
+                        Visibility(visible: widget.isShowLoading , child: LoadingWidget()),
                       ],
                     ),
                   ),
@@ -212,8 +198,7 @@ class _PainterState extends State<Painter> {
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-            color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
+        decoration: BoxDecoration(color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
         height: 70,
         child: ListView(
           scrollDirection: Axis.horizontal,
@@ -368,7 +353,7 @@ class _PainterState extends State<Painter> {
                           type.add(2);
                           fontSize.add(25);
                           offsets.add(Offset.zero);
-                          multiWidget.add(textInput ?? '');
+                          multiWidget.add(textInput);
                           howMuchWidgetIs++;
                         });
                         inputTextController.clear();
@@ -380,9 +365,7 @@ class _PainterState extends State<Painter> {
                   width: 350,
                   height: 60,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 0.5),
-                      borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 0.5), borderRadius: BorderRadius.circular(10)),
                   child: TextField(
                     controller: inputTextController,
                     decoration: InputDecoration(
@@ -400,15 +383,13 @@ class _PainterState extends State<Painter> {
   }
 
   void _onPanStart(DragStartDetails start) {
-    Offset pos = (context.findRenderObject() as RenderBox)
-        .globalToLocal(start.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(start.globalPosition);
     painterController._pathHistory.add(pos);
     painterController._notifyListeners();
   }
 
   void _onPanUpdate(DragUpdateDetails update) {
-    Offset pos = (context.findRenderObject() as RenderBox)
-        .globalToLocal(update.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(update.globalPosition);
     painterController._pathHistory.updateCurrent(pos);
     painterController._notifyListeners();
   }
@@ -423,22 +404,15 @@ class _PainterState extends State<Painter> {
     setState(() {
       isEnableDoneBtn = !isEnableDoneBtn;
     });
-    screenshotController
-        .capture(delay: Duration(milliseconds: 10))
-        .then((capturedImage) async {
+    screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) async {
       final image = File.fromRawPath(capturedImage ?? Uint8List(0));
       setState(() {
         _imageFile = image;
       });
       final paths = await getApplicationDocumentsDirectory();
-      image.copy(paths.path +
-          '/' +
-          DateTime.now().millisecondsSinceEpoch.toString() +
-          '.png');
+      image.copy(paths.path + '/' + DateTime.now().millisecondsSinceEpoch.toString() + '.png');
       print('Image link: $image');
-      widget.calBackImage == null
-          ? print('nothing')
-          : widget.calBackImage!(image);
+      widget.calBackImage == null ? print('nothing') : widget.calBackImage!(image);
       setState(() {
         isEnableDoneBtn = !isEnableDoneBtn;
       });
@@ -451,8 +425,7 @@ class _PainterState extends State<Painter> {
 class _PainterPainter extends CustomPainter {
   final _PathHistory _path;
 
-  _PainterPainter(this._path, {required Listenable repaint})
-      : super(repaint: repaint);
+  _PainterPainter(this._path, {required Listenable repaint}) : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -524,8 +497,7 @@ class _PathHistory {
       Paint p = path.value;
       canvas.drawPath(path.key, p);
     }
-    canvas.drawRect(
-        Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), _backgroundPaint);
     canvas.restore();
   }
 }
@@ -547,9 +519,8 @@ class PainterController extends ChangeNotifier {
 
   double _thickness = 1.0;
   PictureDetails? _cached;
-  _PathHistory _pathHistory  = _PathHistory();
+  _PathHistory _pathHistory = _PathHistory();
   ValueGetter<Size>? _widgetFinish;
-
 
   bool get isEmpty => _pathHistory.isEmpty;
 
@@ -619,8 +590,7 @@ class PainterController extends ChangeNotifier {
       if (_widgetFinish != null) {
         _cached = _render(_widgetFinish!());
       } else {
-        throw new StateError(
-            'Called finish on a PainterController that was not connected to a widget yet!');
+        throw new StateError('Called finish on a PainterController that was not connected to a widget yet!');
       }
     }
     return _cached!;
@@ -630,8 +600,7 @@ class PainterController extends ChangeNotifier {
     PictureRecorder recorder = PictureRecorder();
     Canvas canvas = Canvas(recorder);
     _pathHistory.draw(canvas, size);
-    return PictureDetails(
-        recorder.endRecording(), size.width.floor(), size.height.floor());
+    return PictureDetails(recorder.endRecording(), size.width.floor(), size.height.floor());
   }
 
   bool isFinished() {
@@ -715,8 +684,7 @@ class DrawBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Flexible(child: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+          Flexible(child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
             return Container(
                 child: Slider(
               value: _controller.thickness,
@@ -728,14 +696,12 @@ class DrawBar extends StatelessWidget {
               activeColor: Colors.white,
             ));
           })),
-          StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+          StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
             return RotatedBox(
                 quarterTurns: _controller.eraseMode ? 2 : 0,
                 child: IconButton(
                     icon: Icon(Icons.create),
-                    tooltip: (_controller.eraseMode ? 'Disable' : 'Enable') +
-                        ' eraser',
+                    tooltip: (_controller.eraseMode ? 'Disable' : 'Enable') + ' eraser',
                     onPressed: () {
                       setState(() {
                         _controller.eraseMode = !_controller.eraseMode;
@@ -765,12 +731,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        IconButton(
-            icon: Icon(_iconData, color: _color),
-            tooltip: widget._background
-                ? 'Change background color'
-                : 'Change draw color',
-            onPressed: _pickColor),
+        IconButton(icon: Icon(_iconData, color: _color), tooltip: widget._background ? 'Change background color' : 'Change draw color', onPressed: _pickColor),
         Text(
           'Brush',
           style: TextStyle(color: Colors.white),
@@ -807,12 +768,9 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
         });
   }
 
-  Color get _color => widget._background
-      ? widget._controller.backgroundColor
-      : widget._controller.drawColor;
+  Color get _color => widget._background ? widget._controller.backgroundColor : widget._controller.drawColor;
 
-  IconData get _iconData =>
-      widget._background ? Icons.format_color_fill : FontAwesomeIcons.brush;
+  IconData get _iconData => widget._background ? Icons.format_color_fill : FontAwesomeIcons.brush;
 
   set _color(Color color) {
     if (widget._background) {
