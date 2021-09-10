@@ -418,18 +418,16 @@ class _PainterState extends State<Painter> {
     _imageFile = File('');
     setState(() {
       isEnableDoneBtn = !isEnableDoneBtn;
-      _isShowLoading = !_isShowLoading;
-    });
-    setState(() {
-      isEnableDoneBtn = !isEnableDoneBtn;
-      _isShowLoading = !_isShowLoading;
     });
     screenshotController
-        .capture(delay: Duration(milliseconds: 10))
+        .capture(delay: Duration(milliseconds: 5))
         .then((capturedImage) async {
       final image = File.fromRawPath(capturedImage ?? Uint8List(0));
       setState(() {
         _imageFile = image;
+      });
+      setState(() {
+        _isShowLoading = !_isShowLoading;
       });
       final paths = await getApplicationDocumentsDirectory();
       image.copy(paths.path +
@@ -438,6 +436,10 @@ class _PainterState extends State<Painter> {
           '.png');
       print('Image link: $image');
       Navigator.pop(context, capturedImage);
+      setState(() {
+        isEnableDoneBtn = !isEnableDoneBtn;
+        _isShowLoading = !_isShowLoading;
+      });
     }).catchError((onError) {
       print(onError);
     });
