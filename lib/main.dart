@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_drawer_flutter/lib/painter.dart';
@@ -49,10 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: RaisedButton(
           onPressed: () async {
             var imagePicker = ImagePicker();
-            final filePicked = await imagePicker.pickImage(source: ImageSource.gallery);
+            final filePicked =
+                await imagePicker.pickImage(source: ImageSource.gallery);
 
             setState(() {
-              _imageFile = File(filePicked!.path);
+              _imageFile = File(filePicked?.path ?? '');
             });
             openImageEdit();
           },
@@ -63,19 +65,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> openImageEdit() async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    final result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return Painter(
         imageFile: _imageFile,
         onBackTap: () => Navigator.pop(context),
-        isShowLoading: true,
-        calBackImage: (imageEdited) => Scaffold(
-          body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Image.file(imageEdited),
-          ),
-        ),
       );
     }));
+    if (result != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              body: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Image.memory(result),
+              ),
+            ),
+          ));
+    }
   }
 }

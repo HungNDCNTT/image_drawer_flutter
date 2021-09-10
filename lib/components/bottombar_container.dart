@@ -14,7 +14,7 @@ class BottomBarContainer extends StatefulWidget {
 
   const BottomBarContainer({
     this.onTap,
-    this.title="",
+    this.title = "",
     this.icons,
     this.colors,
     this.controller,
@@ -30,7 +30,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
+      width: MediaQuery.of(context).size.width /10,
       color: widget.colors,
       child: Material(
         color: Colors.black87,
@@ -50,6 +50,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
               Text(
                 widget.title,
                 style: TextStyle(color: Colors.white),
+                overflow: TextOverflow.ellipsis,
               )
             ],
           ),
@@ -64,7 +65,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Text('Pick a color!'),
+            title: Text('Pick a color!'),
             content: SingleChildScrollView(
               child: ColorPicker(
                 pickerColor: pickerColor,
@@ -75,7 +76,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
             ),
             actions: <Widget>[
               FlatButton(
-                child:  Text('Got it'),
+                child: Text('Got it'),
                 onPressed: () {
                   setState(() => _color = pickerColor);
                   Navigator.of(context).pop();
@@ -86,9 +87,12 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
         });
   }
 
-  Color get _color => widget.background ? widget.controller!.backgroundColor : widget.controller!.drawColor;
+  Color get _color => widget.background
+      ? widget.controller!.backgroundColor
+      : widget.controller!.drawColor;
 
-  IconData get _iconData => widget.background ? Icons.format_color_fill : FontAwesomeIcons.brush;
+  IconData get _iconData =>
+      widget.background ? Icons.format_color_fill : FontAwesomeIcons.brush;
 
   set _color(Color color) {
     if (widget.background) {
