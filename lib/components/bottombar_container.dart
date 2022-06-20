@@ -30,7 +30,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width /10,
+      width: MediaQuery.of(context).size.width / 6,
       color: widget.colors,
       child: Material(
         color: Colors.black87,

@@ -98,106 +98,109 @@ class _PainterState extends State<Painter> {
       );
     }
     return Scaffold(
+      backgroundColor: Colors.black,
       key: sCafKey,
       body: Stack(
         children: [
-          GestureDetector(
-            onTap: () {
-              sCafKey.currentState!.showBottomSheet((context) => SizedBox());
-            },
-            child: Center(
-              child: Screenshot(
-                controller: screenshotController,
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  color: Colors.white,
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: RepaintBoundary(
-                    key: globalKey,
-                    child: Stack(
-                      children: [
-                        Image.file(
-                          widget.imageFile,
-                          height: double.infinity,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        Container(
-                          child: child,
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
-                        Stack(
-                          children: multiWidget.asMap().entries.map((f) {
-                            return type[f.key] == 1
-                                ? EmoJiView(
-                                    left: offsets[f.key].dx,
-                                    top: offsets[f.key].dy,
-                                    onTap: () {
-                                      sCafKey.currentState!
-                                          .showBottomSheet((context) => Sliders(
-                                                size: f.key,
-                                                sizeValue:
-                                                    fontSize[f.key]?.toDouble(),
-                                                newSize: (value) {
-                                                  setState(() {
-                                                    fontSize[f.key] = value;
-                                                  });
-                                                },
-                                              ));
-                                    },
-                                    onPanUpdate: (details) {
-                                      setState(() {
-                                        offsets[f.key] = Offset(
-                                            offsets[f.key].dx +
-                                                details.delta.dx,
-                                            offsets[f.key].dy +
-                                                details.delta.dy);
-                                      });
-                                    },
-                                    value: f.value.toString(),
-                                    fontSize: fontSize[f.key].toDouble(),
-                                    align: TextAlign.center,
-                                  )
-                                : type[f.key] == 2
-                                    ? TextView(
-                                        left: offsets[f.key].dx,
-                                        top: offsets[f.key].dy,
-                                        onTap: () {
-                                          sCafKey.currentState!.showBottomSheet(
-                                              (context) => Sliders(
-                                                    size: f.key,
-                                                    sizeValue: fontSize[f.key]
-                                                        ?.toDouble(),
-                                                    isTextSize: true,
-                                                    newSize: (size) {
-                                                      setState(() {
-                                                        fontSize[f.key] = size;
-                                                      });
-                                                    },
-                                                  ));
-                                        },
-                                        onPanUpdate: (details) {
-                                          setState(() {
-                                            offsets[f.key] = Offset(
-                                                offsets[f.key].dx +
-                                                    details.delta.dx,
-                                                offsets[f.key].dy +
-                                                    details.delta.dy);
-                                          });
-                                        },
-                                        value: f.value.toString(),
-                                        fontSize: fontSize[f.key].toDouble(),
-                                        align: TextAlign.center,
-                                      )
-                                    : Container();
-                          }).toList(),
-                        ),
-                        Visibility(
-                            visible: _isShowLoading,
-                            child: LoadingWidget()),
-                      ],
+          SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                sCafKey.currentState!.showBottomSheet((context) => SizedBox());
+              },
+              child: Center(
+                child: Screenshot(
+                  controller: screenshotController,
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    color: Colors.white,
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: RepaintBoundary(
+                      key: globalKey,
+                      child: Stack(
+                        children: [
+                          Image.file(
+                            widget.imageFile,
+                            height: double.infinity,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Container(
+                            child: child,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          Stack(
+                            children: multiWidget.asMap().entries.map((f) {
+                              return type[f.key] == 1
+                                  ? EmoJiView(
+                                      left: offsets[f.key].dx,
+                                      top: offsets[f.key].dy,
+                                      onTap: () {
+                                        sCafKey.currentState!
+                                            .showBottomSheet((context) => Sliders(
+                                                  size: f.key,
+                                                  sizeValue:
+                                                      fontSize[f.key]?.toDouble(),
+                                                  newSize: (value) {
+                                                    setState(() {
+                                                      fontSize[f.key] = value;
+                                                    });
+                                                  },
+                                                ));
+                                      },
+                                      onPanUpdate: (details) {
+                                        setState(() {
+                                          offsets[f.key] = Offset(
+                                              offsets[f.key].dx +
+                                                  details.delta.dx,
+                                              offsets[f.key].dy +
+                                                  details.delta.dy);
+                                        });
+                                      },
+                                      value: f.value.toString(),
+                                      fontSize: fontSize[f.key].toDouble(),
+                                      align: TextAlign.center,
+                                    )
+                                  : type[f.key] == 2
+                                      ? TextView(
+                                          left: offsets[f.key].dx,
+                                          top: offsets[f.key].dy,
+                                          onTap: () {
+                                            sCafKey.currentState!.showBottomSheet(
+                                                (context) => Sliders(
+                                                      size: f.key,
+                                                      sizeValue: fontSize[f.key]
+                                                          ?.toDouble(),
+                                                      isTextSize: true,
+                                                      newSize: (size) {
+                                                        setState(() {
+                                                          fontSize[f.key] = size;
+                                                        });
+                                                      },
+                                                    ));
+                                          },
+                                          onPanUpdate: (details) {
+                                            setState(() {
+                                              offsets[f.key] = Offset(
+                                                  offsets[f.key].dx +
+                                                      details.delta.dx,
+                                                  offsets[f.key].dy +
+                                                      details.delta.dy);
+                                            });
+                                          },
+                                          value: f.value.toString(),
+                                          fontSize: fontSize[f.key].toDouble(),
+                                          align: TextAlign.center,
+                                        )
+                                      : Container();
+                            }).toList(),
+                          ),
+                          Visibility(
+                              visible: _isShowLoading,
+                              child: LoadingWidget()),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -206,112 +209,115 @@ class _PainterState extends State<Painter> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-            color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
-        height: 70,
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            BottomBarContainer(
-              icons: Icons.keyboard_return,
-              onTap: () {
-                if (widget.onBackTap == null) {
-                  Navigator.pop(context);
-                } else {
-                  widget.onBackTap!();
-                }
-                setState(() {
-                  _imageFile = File('');
-                  inputTextController.text = '';
-                  painterController.clear();
-                  type.clear();
-                  fontSize.clear();
-                  offsets.clear();
-                  multiWidget.clear();
-                  inputTextController.clear();
-                  howMuchWidgetIs = 0;
-                });
-              },
-              title: 'Back',
-            ),
-            BottomBarContainer(
-              colors: Colors.black,
-              icons: FontAwesomeIcons.brush,
-              isBrush: true,
-              controller: painterController,
-              title: 'Colors',
-            ),
-            BottomBarContainer(
-              icons: Icons.text_fields,
-              onTap: () {
-                showDialogInputText();
-              },
-              title: 'Text',
-            ),
-            BottomBarContainer(
-              icons: FontAwesomeIcons.smile,
-              onTap: () {
-                Future getemojis = showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Emojies();
-                    });
-                getemojis.then((value) {
-                  if (value != null) {
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.black, boxShadow: [BoxShadow(blurRadius: 10.9)]),
+          height: 70,
+          //width: MediaQuery.of(context).size.width,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            children: <Widget>[
+              BottomBarContainer(
+                icons: Icons.keyboard_return,
+                onTap: () {
+                  if (widget.onBackTap == null) {
+                    Navigator.pop(context);
+                  } else {
+                    widget.onBackTap!();
+                  }
+                  setState(() {
+                    _imageFile = File('');
+                    inputTextController.text = '';
+                    painterController.clear();
+                    type.clear();
+                    fontSize.clear();
+                    offsets.clear();
+                    multiWidget.clear();
+                    inputTextController.clear();
+                    howMuchWidgetIs = 0;
+                  });
+                },
+                title: 'Back',
+              ),
+              BottomBarContainer(
+                colors: Colors.black,
+                icons: FontAwesomeIcons.brush,
+                isBrush: true,
+                controller: painterController,
+                title: 'Colors',
+              ),
+              BottomBarContainer(
+                icons: Icons.text_fields,
+                onTap: () {
+                  showDialogInputText();
+                },
+                title: 'Text',
+              ),
+              BottomBarContainer(
+                icons: FontAwesomeIcons.smile,
+                onTap: () {
+                  Future getemojis = showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Emojies();
+                      });
+                  getemojis.then((value) {
+                    if (value != null) {
+                      setState(() {
+                        type.add(1);
+                        fontSize.add(25);
+                        offsets.add(Offset.zero);
+                        multiWidget.add(value ?? '');
+                        howMuchWidgetIs++;
+                      });
+                    }
+                  });
+                },
+                title: 'Emoji',
+              ),
+              BottomBarContainer(
+                icons: Icons.delete,
+                onTap: () {
+                  setState(() {
+                    painterController.clear();
+                    type.clear();
+                    fontSize.clear();
+                    offsets.clear();
+                    multiWidget.clear();
+                    howMuchWidgetIs = 0;
+                  });
+                },
+                title: 'Clear all',
+              ),
+              _buildThickness(),
+              BottomBarContainer(
+                icons: Icons.undo,
+                onTap: () {
+                  if (painterController.isEmpty) {
+                  } else {
+                    painterController.undo();
+                  }
+                  if (multiWidget != null && multiWidget.length > 0) {
                     setState(() {
-                      type.add(1);
-                      fontSize.add(25);
-                      offsets.add(Offset.zero);
-                      multiWidget.add(value ?? '');
-                      howMuchWidgetIs++;
+                      multiWidget.removeLast();
+                      type.removeLast();
+                      fontSize.removeLast();
+                      offsets.removeLast();
+                      howMuchWidgetIs--;
                     });
                   }
-                });
-              },
-              title: 'Emoji',
-            ),
-            BottomBarContainer(
-              icons: Icons.delete,
-              onTap: () {
-                setState(() {
-                  painterController.clear();
-                  type.clear();
-                  fontSize.clear();
-                  offsets.clear();
-                  multiWidget.clear();
-                  howMuchWidgetIs = 0;
-                });
-              },
-              title: 'Clear all',
-            ),
-            _buildThickness(),
-            BottomBarContainer(
-              icons: Icons.undo,
-              onTap: () {
-                if (painterController.isEmpty) {
-                } else {
-                  painterController.undo();
-                }
-                if (multiWidget != null && multiWidget.length > 0) {
-                  setState(() {
-                    multiWidget.removeLast();
-                    type.removeLast();
-                    fontSize.removeLast();
-                    offsets.removeLast();
-                    howMuchWidgetIs--;
-                  });
-                }
-              },
-              title: 'Undo',
-            ),
-            BottomBarContainer(
-              icons: isEnableDoneBtn ? Icons.check : Icons.upload_rounded,
-              onTap: isEnableDoneBtn ? _onDonePress : null,
-              title: isEnableDoneBtn ? 'Done' : 'Uploading',
-            ),
-          ],
+                },
+                title: 'Undo',
+              ),
+              BottomBarContainer(
+                icons: isEnableDoneBtn ? Icons.check : Icons.upload_rounded,
+                onTap: isEnableDoneBtn ? _onDonePress : null,
+                title: isEnableDoneBtn ? 'Done' : 'Uploading',
+              ),
+            ],
+          ),
         ),
       ),
     );
