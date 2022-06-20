@@ -102,105 +102,103 @@ class _PainterState extends State<Painter> {
       key: sCafKey,
       body: Stack(
         children: [
-          SafeArea(
-            child: GestureDetector(
-              onTap: () {
-                sCafKey.currentState!.showBottomSheet((context) => SizedBox());
-              },
-              child: Center(
-                child: Screenshot(
-                  controller: screenshotController,
-                  child: Container(
-                    margin: EdgeInsets.all(20),
-                    color: Colors.white,
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: RepaintBoundary(
-                      key: globalKey,
-                      child: Stack(
-                        children: [
-                          Image.file(
-                            widget.imageFile,
-                            height: double.infinity,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                          Container(
-                            child: child,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                          Stack(
-                            children: multiWidget.asMap().entries.map((f) {
-                              return type[f.key] == 1
-                                  ? EmoJiView(
-                                      left: offsets[f.key].dx,
-                                      top: offsets[f.key].dy,
-                                      onTap: () {
-                                        sCafKey.currentState!
-                                            .showBottomSheet((context) => Sliders(
-                                                  size: f.key,
-                                                  sizeValue:
-                                                      fontSize[f.key]?.toDouble(),
-                                                  newSize: (value) {
-                                                    setState(() {
-                                                      fontSize[f.key] = value;
-                                                    });
-                                                  },
-                                                ));
-                                      },
-                                      onPanUpdate: (details) {
-                                        setState(() {
-                                          offsets[f.key] = Offset(
-                                              offsets[f.key].dx +
-                                                  details.delta.dx,
-                                              offsets[f.key].dy +
-                                                  details.delta.dy);
-                                        });
-                                      },
-                                      value: f.value.toString(),
-                                      fontSize: fontSize[f.key].toDouble(),
-                                      align: TextAlign.center,
-                                    )
-                                  : type[f.key] == 2
-                                      ? TextView(
-                                          left: offsets[f.key].dx,
-                                          top: offsets[f.key].dy,
-                                          onTap: () {
-                                            sCafKey.currentState!.showBottomSheet(
-                                                (context) => Sliders(
-                                                      size: f.key,
-                                                      sizeValue: fontSize[f.key]
-                                                          ?.toDouble(),
-                                                      isTextSize: true,
-                                                      newSize: (size) {
-                                                        setState(() {
-                                                          fontSize[f.key] = size;
-                                                        });
-                                                      },
-                                                    ));
-                                          },
-                                          onPanUpdate: (details) {
-                                            setState(() {
-                                              offsets[f.key] = Offset(
-                                                  offsets[f.key].dx +
-                                                      details.delta.dx,
-                                                  offsets[f.key].dy +
-                                                      details.delta.dy);
-                                            });
-                                          },
-                                          value: f.value.toString(),
-                                          fontSize: fontSize[f.key].toDouble(),
-                                          align: TextAlign.center,
-                                        )
-                                      : Container();
-                            }).toList(),
-                          ),
-                          Visibility(
-                              visible: _isShowLoading,
-                              child: LoadingWidget()),
-                        ],
-                      ),
+          GestureDetector(
+            onTap: () {
+              sCafKey.currentState!.showBottomSheet((context) => SizedBox());
+            },
+            child: Center(
+              child: Screenshot(
+                controller: screenshotController,
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: RepaintBoundary(
+                    key: globalKey,
+                    child: Stack(
+                      children: [
+                        Image.file(
+                          widget.imageFile,
+                          height: double.infinity,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          child: child,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                        Stack(
+                          children: multiWidget.asMap().entries.map((f) {
+                            return type[f.key] == 1
+                                ? EmoJiView(
+                                    left: offsets[f.key].dx,
+                                    top: offsets[f.key].dy,
+                                    onTap: () {
+                                      sCafKey.currentState!
+                                          .showBottomSheet((context) => Sliders(
+                                                size: f.key,
+                                                sizeValue:
+                                                    fontSize[f.key]?.toDouble(),
+                                                newSize: (value) {
+                                                  setState(() {
+                                                    fontSize[f.key] = value;
+                                                  });
+                                                },
+                                              ));
+                                    },
+                                    onPanUpdate: (details) {
+                                      setState(() {
+                                        offsets[f.key] = Offset(
+                                            offsets[f.key].dx +
+                                                details.delta.dx,
+                                            offsets[f.key].dy +
+                                                details.delta.dy);
+                                      });
+                                    },
+                                    value: f.value.toString(),
+                                    fontSize: fontSize[f.key].toDouble(),
+                                    align: TextAlign.center,
+                                  )
+                                : type[f.key] == 2
+                                    ? TextView(
+                                        left: offsets[f.key].dx,
+                                        top: offsets[f.key].dy,
+                                        onTap: () {
+                                          sCafKey.currentState!.showBottomSheet(
+                                              (context) => Sliders(
+                                                    size: f.key,
+                                                    sizeValue: fontSize[f.key]
+                                                        ?.toDouble(),
+                                                    isTextSize: true,
+                                                    newSize: (size) {
+                                                      setState(() {
+                                                        fontSize[f.key] = size;
+                                                      });
+                                                    },
+                                                  ));
+                                        },
+                                        onPanUpdate: (details) {
+                                          setState(() {
+                                            offsets[f.key] = Offset(
+                                                offsets[f.key].dx +
+                                                    details.delta.dx,
+                                                offsets[f.key].dy +
+                                                    details.delta.dy);
+                                          });
+                                        },
+                                        value: f.value.toString(),
+                                        fontSize: fontSize[f.key].toDouble(),
+                                        align: TextAlign.center,
+                                      )
+                                    : Container();
+                          }).toList(),
+                        ),
+                        Visibility(
+                            visible: _isShowLoading,
+                            child: LoadingWidget()),
+                      ],
                     ),
                   ),
                 ),
