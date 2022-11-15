@@ -148,13 +148,13 @@ class _PainterState extends State<Painter> {
                                               ));
                                     },
                                     onPanUpdate: (details) {
-                                      setState(() {
-                                        offsets[f.key] = Offset(
-                                            offsets[f.key].dx +
-                                                details.delta.dx,
-                                            offsets[f.key].dy +
-                                                details.delta.dy);
-                                      });
+                                      // setState(() {
+                                      //   offsets[f.key] = Offset(
+                                      //       offsets[f.key].dx +
+                                      //           details.delta.dx,
+                                      //       offsets[f.key].dy +
+                                      //           details.delta.dy);
+                                      // });
                                     },
                                     value: f.value.toString(),
                                     fontSize: fontSize[f.key].toDouble(),
@@ -179,13 +179,13 @@ class _PainterState extends State<Painter> {
                                                   ));
                                         },
                                         onPanUpdate: (details) {
-                                          setState(() {
-                                            offsets[f.key] = Offset(
-                                                offsets[f.key].dx +
-                                                    details.delta.dx,
-                                                offsets[f.key].dy +
-                                                    details.delta.dy);
-                                          });
+                                          // setState(() {
+                                          //   offsets[f.key] = Offset(
+                                          //       offsets[f.key].dx +
+                                          //           details.delta.dx,
+                                          //       offsets[f.key].dy +
+                                          //           details.delta.dy);
+                                          // });
                                         },
                                         value: f.value.toString(),
                                         fontSize: fontSize[f.key].toDouble(),
@@ -508,7 +508,7 @@ class _PathHistory {
   void updateCurrent(Offset nextPoint) {
     if (_inDrag) {
       Path path = _paths.last.key;
-      path.lineTo(nextPoint.dx, nextPoint.dy);
+      path.lineTo(nextPoint.dx - 20, nextPoint.dy - 20);
     }
   }
 
