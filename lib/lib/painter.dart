@@ -500,7 +500,7 @@ class _PathHistory {
     if (!_inDrag) {
       _inDrag = true;
       Path path = Path();
-      path.moveTo(startPoint.dx, startPoint.dy);
+      path.moveTo(startPoint.dx -20, startPoint.dy -20);
       _paths.add(MapEntry<Path, Paint>(path, currentPaint));
     }
   }
