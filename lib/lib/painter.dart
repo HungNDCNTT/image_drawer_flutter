@@ -92,6 +92,10 @@ class _PainterState extends State<Painter> {
     if (!_finished!) {
       child = GestureDetector(
         child: child,
+        onPanDown: (val){
+          _onPanStart(DragStartDetails(localPosition: val.localPosition,globalPosition: val.globalPosition));
+          _onPanUpdate(DragUpdateDetails(localPosition: val.localPosition,globalPosition: val.globalPosition));
+          },
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
@@ -396,8 +400,7 @@ class _PainterState extends State<Painter> {
   }
 
   void _onPanStart(DragStartDetails start) {
-    Offset pos = (context.findRenderObject() as RenderBox)
-        .globalToLocal(start.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(start.globalPosition);
     painterController._pathHistory.add(pos);
     painterController._notifyListeners();
   }
