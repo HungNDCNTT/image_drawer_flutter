@@ -96,6 +96,7 @@ class _PainterState extends State<Painter> {
           _onPanStart(DragStartDetails(localPosition: val.localPosition,globalPosition: val.globalPosition));
           _onPanUpdate(DragUpdateDetails(localPosition: val.localPosition,globalPosition: val.globalPosition));
           },
+        onPanCancel: () => _onPanEnd(DragEndDetails()),
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
