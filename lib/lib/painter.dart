@@ -152,13 +152,13 @@ class _PainterState extends State<Painter> {
                                               ));
                                     },
                                     onPanUpdate: (details) {
-                                      // setState(() {
-                                      //   offsets[f.key] = Offset(
-                                      //       offsets[f.key].dx +
-                                      //           details.delta.dx,
-                                      //       offsets[f.key].dy +
-                                      //           details.delta.dy);
-                                      // });
+                                      setState(() {
+                                        offsets[f.key] = Offset(
+                                            offsets[f.key].dx +
+                                                details.delta.dx,
+                                            offsets[f.key].dy +
+                                                details.delta.dy);
+                                      });
                                     },
                                     value: f.value.toString(),
                                     fontSize: fontSize[f.key].toDouble(),
