@@ -75,7 +75,7 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
+              ElevatedButton(
                 child: Text('Got it'),
                 onPressed: () {
                   setState(() => _color = pickerColor);

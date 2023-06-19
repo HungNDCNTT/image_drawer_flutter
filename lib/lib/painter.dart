@@ -357,12 +357,12 @@ class _PainterState extends State<Painter> {
               child: AlertDialog(
                 title: Text("Input Text"),
                 actions: <Widget>[
-                  FlatButton(
+                  ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
                       child: Text("Cancel")),
-                  FlatButton(
+                  ElevatedButton(
                       onPressed: () {
                         setState(() {
                           textInput = inputTextController.text;
@@ -796,7 +796,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
+              ElevatedButton(
                 child: Text('Got it'),
                 onPressed: () {
                   setState(() => _color = pickerColor);

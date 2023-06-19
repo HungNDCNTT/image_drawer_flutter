@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () async {
             var imagePicker = ImagePicker();
             final filePicked =
