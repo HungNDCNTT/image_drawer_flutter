@@ -70,7 +70,6 @@ class _BottomBarContainerState extends State<BottomBarContainer> {
               child: ColorPicker(
                 pickerColor: pickerColor,
                 onColorChanged: (Color c) => pickerColor = c,
-                showLabel: true,
                 pickerAreaHeightPercent: 0.8,
               ),
             ),

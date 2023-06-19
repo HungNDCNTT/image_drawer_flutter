@@ -256,7 +256,7 @@ class _PainterState extends State<Painter> {
               title: 'Text',
             ),
             BottomBarContainer(
-              icons: FontAwesomeIcons.smile,
+              icons: FontAwesomeIcons.faceSmile,
               onTap: () {
                 Future getemojis = showModalBottomSheet(
                     context: context,
@@ -791,7 +791,6 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
               child: ColorPicker(
                 pickerColor: pickerColor,
                 onColorChanged: (Color c) => pickerColor = c,
-                showLabel: true,
                 pickerAreaHeightPercent: 0.8,
               ),
             ),
